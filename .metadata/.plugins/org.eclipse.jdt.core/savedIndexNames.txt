@@ -1,0 +1,5 @@
+INDEX VERSION 1.126+/home/sdubouchez/Documents/Enseirb/S9/Projet_avance/media-center-home/.metadata/.plugins/org.eclipse.jdt.core
+2389751967.index
+884637635.index
+876014427.index
+579503417.index

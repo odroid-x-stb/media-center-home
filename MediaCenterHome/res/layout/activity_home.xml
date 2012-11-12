@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
@@ -7,13 +7,29 @@
 
     <GridLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:rowCount="4"
+        android:columnCount="4" >
         
         <TextView
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:text="@string/hello_world" />
         
+        <View 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/show_all_apps" />
+                
+    </GridLayout>
+    
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:rowCount="5"
+        android:columnCount="4"
+        android:id="@+id/all_apps" >
+        
     </GridLayout>
 
-</RelativeLayout>
+</FrameLayout>

@@ -1,0 +1,67 @@
+package com.odroid.home;
+
+import java.util.ArrayList;
+
+import com.odroid.home.Home.ApplicationsIntentReceiver;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Intent;
+import android.view.Menu;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.LayoutAnimationController;
+import android.widget.CheckBox;
+import android.widget.GridView;
+
+public class MediaHome extends Activity {
+
+	/**
+     * Tag used for logging errors.
+     */
+    private static final String LOG_TAG = "Home";
+
+    /**
+     * Keys during freeze/thaw.
+     */
+    private static final String KEY_SAVE_GRID_OPENED = "grid.opened";
+
+    private static ArrayList<ApplicationInfo> mApplications;
+
+    private final BroadcastReceiver mApplicationsReceiver = new ApplicationsIntentReceiver();
+
+    private GridView mGrid;
+
+    private LayoutAnimationController mShowLayoutAnimation;
+    private LayoutAnimationController mHideLayoutAnimation;
+
+    private boolean mBlockAnimation;
+
+    private boolean mHomeDown;
+    private boolean mBackDown;
+    
+    private View mShowApplications;
+    private CheckBox mShowApplicationsCheck;
+
+    private Animation mGridEntry;
+    private Animation mGridExit;
+    
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
+        Intent desktopIntent = new Intent(Intent.ACTION_MAIN, null);
+        desktopIntent.addCategory(Intent.CATEGORY_HOME);
+        desktopIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        System.out.println("launch");
+        startActivity(desktopIntent);
+        System.out.println("launched");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_home, menu);
+        return true;
+    }
+}
