@@ -23,7 +23,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PaintDrawable;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -59,7 +58,6 @@ public class MediaHome extends Activity {
     private boolean mBlockAnimation;
     
     private View mShowApplications;
-    private CheckBox mShowApplicationsCheck;
 
     private Animation mGridEntry;
     private Animation mGridExit;
@@ -159,7 +157,6 @@ public class MediaHome extends Activity {
     private void bindButtons() {
         mShowApplications = findViewById(R.id.show_all_apps);
         mShowApplications.setOnClickListener(new ShowApplications());
-        mShowApplicationsCheck = (CheckBox) findViewById(R.id.show_all_apps_check);
 
         mGrid.setOnItemClickListener(new ApplicationLauncher());
     }
@@ -215,8 +212,6 @@ public class MediaHome extends Activity {
         }
         mBlockAnimation = true;
 
-        mShowApplicationsCheck.toggle();
-
         if (mShowLayoutAnimation == null) {
             mShowLayoutAnimation = AnimationUtils.loadLayoutAnimation(
                     this, R.anim.show_applications);
@@ -243,8 +238,6 @@ public class MediaHome extends Activity {
             return;
         }
         mBlockAnimation = true;
-
-        mShowApplicationsCheck.toggle();
 
         if (mHideLayoutAnimation == null) {
             mHideLayoutAnimation = AnimationUtils.loadLayoutAnimation(
