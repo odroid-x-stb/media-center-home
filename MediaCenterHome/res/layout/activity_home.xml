@@ -23,13 +23,23 @@
                 
     </GridLayout>
     
-    <GridLayout
-        android:layout_width="match_parent"
+    <GridView
+        android:id="@+id/all_apps"
+        android:background="#000000"
+        android:persistentDrawingCache="animation|scrolling"
+        android:alwaysDrawnWithCache="true"
+        android:scrollbars="none"
+        android:drawSelectorOnTop="false"
+        android:numColumns="auto_fit"
+        android:columnWidth="78dp"
+        android:stretchMode="spacingWidth"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp"
         android:layout_height="match_parent"
-        android:rowCount="5"
-        android:columnCount="4"
-        android:id="@+id/all_apps" >
+        android:layout_width="match_parent"
+        android:stackFromBottom="false"
+        android:visibility="invisible" >
         
-    </GridLayout>
+    </GridView>
 
 </FrameLayout>

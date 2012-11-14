@@ -17,4 +17,5 @@
 <gridLayoutAnimation xmlns:android="http://schemas.android.com/apk/res/android"
         android:rowDelay="25%"
         android:directionPriority="column"
+        android:direction="left_to_right|top_to_bottom"
         android:animation="@anim/fade_out" />

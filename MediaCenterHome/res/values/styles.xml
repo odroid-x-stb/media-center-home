@@ -30,6 +30,4 @@
         <item name="android:textColor">#090B0C</item>
     </style>
 
-    <style name="AppTheme" parent="android:Theme.Holo.Light.NoActionBar" />
-
 </resources>

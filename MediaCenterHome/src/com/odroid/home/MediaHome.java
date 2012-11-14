@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -13,18 +14,24 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PaintDrawable;
+import android.util.TypedValue;
+import android.view.Display;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
@@ -247,7 +254,6 @@ public class MediaHome extends Activity {
         mGridExit.setAnimationListener(new HideGrid());
         mGrid.startAnimation(mGridExit);
         mGrid.setVisibility(View.INVISIBLE);
-        mShowApplications.requestFocus();
 
     }
 
@@ -282,48 +288,64 @@ public class MediaHome extends Activity {
             }
 
             Drawable icon = info.icon;
-
+            
             if (!info.filtered) {
-                //final Resources resources = getContext().getResources();
-                int width = 42;//(int) resources.getDimension(android.R.dimen.app_icon_size);
-                int height = 42;//(int) resources.getDimension(android.R.dimen.app_icon_size);
+                final Resources resources = getContext().getResources();
+                
+                
+                // Problem : dimension are too low compare to available space
+                //
+                // int width = (int) resources.getDimension(android.R.dimen.app_icon_size);
+                // int height = (int) resources.getDimension(android.R.dimen.app_icon_size);
+                //
+                
+                // 78 DIP correspond to text title size
+                // 68 keeps 5 DIP free space on each side
+                int maxSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 68, resources.getDisplayMetrics());
+                
+                // Get the originale icon sizes to get ratio
+                int iconWidth = icon.getIntrinsicWidth();
+                int iconHeight = icon.getIntrinsicHeight();
+                final float ratio = (float) iconWidth / iconHeight;
+                
+                // Resize the icon size to fit available size
+                if (iconWidth > iconHeight) {
+                	iconWidth = maxSize;
+                	iconHeight = (int) (maxSize / ratio);
+                } else if (iconHeight > iconWidth) {
+                	iconWidth = (int) (maxSize * ratio);
+                	iconHeight = maxSize;
+                } else if (iconHeight == iconWidth) {
+                	iconWidth = iconHeight = maxSize;
+                }
+                
+                final int freeHeightSpace = maxSize-iconHeight;
+                final int freeWidthSpace = maxSize-iconWidth;
 
-                final int iconWidth = icon.getIntrinsicWidth();
-                final int iconHeight = icon.getIntrinsicHeight();
-
+                
                 if (icon instanceof PaintDrawable) {
                     PaintDrawable painter = (PaintDrawable) icon;
-                    painter.setIntrinsicWidth(width);
-                    painter.setIntrinsicHeight(height);
+                    painter.setIntrinsicWidth(iconWidth);
+                    painter.setIntrinsicHeight(iconHeight);
                 }
 
-                if (width > 0 && height > 0 && (width < iconWidth || height < iconHeight)) {
-                    final float ratio = (float) iconWidth / iconHeight;
-
-                    if (iconWidth > iconHeight) {
-                        height = (int) (width / ratio);
-                    } else if (iconHeight > iconWidth) {
-                        width = (int) (height * ratio);
-                    }
-
-                    final Bitmap.Config c =
-                            icon.getOpacity() != PixelFormat.OPAQUE ?
-                                Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
-                    final Bitmap thumb = Bitmap.createBitmap(width, height, c);
-                    final Canvas canvas = new Canvas(thumb);
-                    canvas.setDrawFilter(new PaintFlagsDrawFilter(Paint.DITHER_FLAG, 0));
-                    // Copy the old bounds to restore them later
-                    // If we were to do oldBounds = icon.getBounds(),
-                    // the call to setBounds() that follows would
-                    // change the same instance and we would lose the
-                    // old bounds
-                    mOldBounds.set(icon.getBounds());
-                    icon.setBounds(0, 0, width, height);
-                    icon.draw(canvas);
-                    icon.setBounds(mOldBounds);
-                    icon = info.icon = new BitmapDrawable(thumb);
-                    info.filtered = true;
-                }
+                final Bitmap.Config c =
+                        icon.getOpacity() != PixelFormat.OPAQUE ?
+                            Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
+                final Bitmap thumb = Bitmap.createBitmap(maxSize, maxSize, c);
+                final Canvas canvas = new Canvas(thumb);
+                canvas.setDrawFilter(new PaintFlagsDrawFilter(Paint.DITHER_FLAG, 0));
+                // Copy the old bounds to restore them later
+                // If we were to do oldBounds = icon.getBounds(),
+                // the call to setBounds() that follows would
+                // change the same instance and we would lose the
+                // old bounds
+                mOldBounds.set(icon.getBounds());
+                icon.setBounds(freeWidthSpace/2, freeHeightSpace/2, iconWidth+freeWidthSpace/2, iconHeight+freeHeightSpace/2);
+                icon.draw(canvas);
+                icon.setBounds(mOldBounds);
+                icon = info.icon = new BitmapDrawable(thumb);
+                info.filtered = true;
             }
 
             final TextView textView = (TextView) convertView.findViewById(R.id.label);
@@ -386,6 +408,37 @@ public class MediaHome extends Activity {
             ApplicationInfo app = (ApplicationInfo) parent.getItemAtPosition(position);
             startActivity(app.intent);
         }
+    }
+    
+    
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            switch (event.getKeyCode()) {
+                case KeyEvent.KEYCODE_BACK:
+                    return true;
+                case KeyEvent.KEYCODE_HOME:
+                    return true;
+            }
+        } else if (event.getAction() == KeyEvent.ACTION_UP) {
+            switch (event.getKeyCode()) {
+                case KeyEvent.KEYCODE_BACK:
+                    if (!event.isCanceled()) {
+                        // Do BACK behavior.
+                    	if (mGrid.getVisibility() == View.VISIBLE) {
+                    		hideApplications();
+                    	}
+                    }
+                    return true;
+                case KeyEvent.KEYCODE_HOME:
+                    if (!event.isCanceled()) {
+                        // Do HOME behavior.
+                    }
+                    return true;
+            }
+        }
+
+        return super.dispatchKeyEvent(event);
     }
 
 }
