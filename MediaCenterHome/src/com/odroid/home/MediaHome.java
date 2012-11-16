@@ -39,6 +39,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MediaHome extends Activity {
@@ -64,7 +65,7 @@ public class MediaHome extends Activity {
 
     private boolean mBlockAnimation;
     
-    private View mShowApplications;
+    private ImageView mShowApplications;
 
     private Animation mGridEntry;
     private Animation mGridExit;
@@ -162,7 +163,7 @@ public class MediaHome extends Activity {
      * Binds actions to the various buttons.
      */
     private void bindButtons() {
-        mShowApplications = findViewById(R.id.show_all_apps);
+        mShowApplications = (ImageView) findViewById(R.id.show_all_apps);
         mShowApplications.setOnClickListener(new ShowApplications());
 
         mGrid.setOnItemClickListener(new ApplicationLauncher());

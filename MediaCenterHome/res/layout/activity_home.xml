@@ -5,23 +5,85 @@
 
     
 
-    <GridLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:rowCount="4"
-        android:columnCount="4" >
+        android:orientation="vertical">
+        
+        <Space 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"/>
         
         <TextView
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:text="@string/hello_world" />
+	        android:layout_gravity="center"
+	        android:text="11:09"
+	        android:textAppearance="@android:style/TextAppearance.Large"
+	        android:textSize="100sp"
+	        android:textStyle="bold"
+	        android:textColor="#0099CC"
+	        android:gravity="center_vertical|center_horizontal"
+	        android:layout_weight="5" />
         
-        <View 
+        <LinearLayout 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+	        android:layout_weight="5"
+            android:orientation="horizontal">
+        
+	        <ImageView 
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	        	android:layout_gravity="center_vertical|center_horizontal"
+	            android:src="@drawable/ic_upload"/>
+	        
+	        <ImageView 
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	            android:layout_gravity="center_vertical|center_horizontal"
+	            android:src="@drawable/ic_connect"/>
+	        
+	        <ImageView 
+	            android:id="@+id/show_all_apps"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	            android:layout_gravity="center_vertical|center_horizontal"
+	            android:src="@drawable/ic_apps"/>
+	        
+	        <ImageView 
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	            android:layout_gravity="center_vertical|center_horizontal"
+	            android:src="@drawable/ic_play"/>
+	        
+	        <ImageView 
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	            android:layout_gravity="center_vertical|center_horizontal"
+	            android:src="@drawable/ic_parameters"/>
+
+	    </LinearLayout>
+	    
+        <Space 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"/>
+	        
+        <ImageView 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/show_all_apps" />
+	        android:layout_weight="1"
+            android:layout_gravity="bottom|right"
+            android:src="@drawable/ic_power"/>
                 
-    </GridLayout>
+    </LinearLayout>
     
     <GridView
         android:id="@+id/all_apps"
