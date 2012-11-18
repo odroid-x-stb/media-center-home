@@ -1,4 +1,4 @@
-package com.odroid.home;
+package fr.enseirb.odroidx.home;
 
 import android.content.ComponentName;
 import android.content.Intent;

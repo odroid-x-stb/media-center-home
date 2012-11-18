@@ -1,6 +1,8 @@
 <resources>
 
     <string name="app_name">MediaCenterHome</string>
-    <string name="title_activity_home">Home</string>
-
+    <string name="package_upload">fr.enseirb.odroidx.upload</string>
+	<string name="package_play">fr.enseirb.odroidx.videoplayer</string>
+	<string name="package_remote">fr.enseirb.odroidx.remote</string>
+    
 </resources>

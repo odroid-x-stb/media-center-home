@@ -1,9 +1,11 @@
-package com.odroid.home;
+package fr.enseirb.odroidx.home;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
+import fr.enseirb.odroidx.home.R;
 
 import android.opengl.Visibility;
 import android.os.Bundle;
@@ -34,6 +36,7 @@ import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
@@ -45,6 +48,7 @@ import android.widget.CheckBox;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MediaHome extends Activity {
 
@@ -76,6 +80,12 @@ public class MediaHome extends Activity {
     private Handler mHandler;
     private Runnable mTicker;
     private Date mDateNow;
+    
+    private ImageView mUploadButton;
+    private ImageView mConnectRemoteButton;
+    private ImageView mPlayVideoButton;
+    private ImageView mParametersButton;
+    private OnClickListener mButtonClickedListener;
     
     private Animation mGridEntry;
     private Animation mGridExit;
@@ -182,7 +192,46 @@ public class MediaHome extends Activity {
 
         mGrid.setOnItemClickListener(new ApplicationLauncher());
         
-        
+        mUploadButton = (ImageView) findViewById(R.id.upload);
+        mConnectRemoteButton = (ImageView) findViewById(R.id.connect_remote);
+        mPlayVideoButton = (ImageView) findViewById(R.id.play_video);
+        mButtonClickedListener = new OnClickListener() {
+			
+			public void onClick(View v) {
+				String packageName = "";
+				switch (v.getId()) {
+				case R.id.upload:
+					packageName = getString(R.string.package_upload);
+					break;
+				case R.id.connect_remote:
+					packageName = getString(R.string.package_remote);
+					break;
+				case R.id.play_video:
+					packageName = getString(R.string.package_play);
+					break;
+				}
+				try {
+					Intent launchAppIntent = getPackageManager().getLaunchIntentForPackage(packageName);
+					startActivity(launchAppIntent);
+				}
+				catch (Exception e) {
+					Toast.makeText(MediaHome.this, packageName + " is not installed", Toast.LENGTH_LONG).show();
+				}
+			}
+		};
+		mUploadButton.setOnClickListener(mButtonClickedListener);
+		mConnectRemoteButton.setOnClickListener(mButtonClickedListener);
+		mPlayVideoButton.setOnClickListener(mButtonClickedListener);
+		
+		
+		mParametersButton = (ImageView) findViewById(R.id.parameters);
+		mParametersButton.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				Intent goToParameters = new Intent(MediaHome.this, Parameters.class);
+				startActivity(goToParameters);
+			}
+		});
     }
     
     /**
@@ -452,6 +501,9 @@ public class MediaHome extends Activity {
             startActivity(app.intent);
         }
     }
+    
+    
+    
     
     
     @Override
