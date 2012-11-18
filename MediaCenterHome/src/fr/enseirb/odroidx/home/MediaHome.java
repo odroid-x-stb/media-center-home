@@ -1,6 +1,7 @@
 package fr.enseirb.odroidx.home;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -79,7 +80,7 @@ public class MediaHome extends Activity {
     private boolean mTickerStopped;
     private Handler mHandler;
     private Runnable mTicker;
-    private Date mDateNow;
+    private Calendar mCalendar;
     
     private ImageView mUploadButton;
     private ImageView mConnectRemoteButton;
@@ -243,21 +244,33 @@ public class MediaHome extends Activity {
     	mTickerStopped = false;
         mHandler = new Handler();
 
-        mDateNow = new Date();
+        mCalendar = Calendar.getInstance();
         /**
          * requests a tick on the next hard-second boundary
          */
         mTicker = new Runnable() {
                 public void run() {
                     if (mTickerStopped) return;
-                    mDateNow.setTime(System.currentTimeMillis());
-                    mClock.setText(mDateNow.getHours() + ":" + mDateNow.getMinutes());
+                    mCalendar.setTimeInMillis(System.currentTimeMillis());
+                    mClock.setText(formatTimeValue(mCalendar.get(Calendar.HOUR_OF_DAY)) + ":" + formatTimeValue(mCalendar.get(Calendar.MINUTE)));
                     long now = SystemClock.uptimeMillis();
                     long next = now + (1000 - now % 1000);
                     mHandler.postAtTime(mTicker, next);
                 }
             };
         mTicker.run();
+    }
+    
+    /**
+     * @param nonFormatedTime time to format to HH or MM
+     * @return formated string
+     */
+    String formatTimeValue(int nonFormatedTime) {
+    	String formatedString = String.valueOf(nonFormatedTime);
+    	if (nonFormatedTime < 10) {
+    		formatedString = "0" + nonFormatedTime;
+    	}
+		return formatedString;
     }
     
 
