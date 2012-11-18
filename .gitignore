@@ -14,3 +14,6 @@ MediaCenterHome/gen/
 
 # Local configuration file (sdk path, etc)
 local.properties
+.metadata
+
+*~
