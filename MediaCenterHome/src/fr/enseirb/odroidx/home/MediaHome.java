@@ -3,12 +3,10 @@ package fr.enseirb.odroidx.home;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import fr.enseirb.odroidx.home.R;
 
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -26,26 +24,23 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.PixelFormat;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PaintDrawable;
-import android.text.format.DateFormat;
 import android.util.TypedValue;
-import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -87,6 +82,7 @@ public class MediaHome extends Activity {
     private ImageView mPlayVideoButton;
     private ImageView mParametersButton;
     private OnClickListener mButtonClickedListener;
+    private OnTouchListener mButtonTouchFeedbackListener;
     
     private Animation mGridEntry;
     private Animation mGridExit;
@@ -223,6 +219,25 @@ public class MediaHome extends Activity {
 		mUploadButton.setOnClickListener(mButtonClickedListener);
 		mConnectRemoteButton.setOnClickListener(mButtonClickedListener);
 		mPlayVideoButton.setOnClickListener(mButtonClickedListener);
+		mButtonTouchFeedbackListener = new OnTouchListener() {
+			
+			public boolean onTouch(View v, MotionEvent event) {
+				switch (event.getAction()) {
+				case MotionEvent.ACTION_DOWN:
+					v.setAlpha(0.5f);
+					break;
+				case MotionEvent.ACTION_UP:
+					v.setAlpha(1.0f);
+					break;
+				}
+				return false;
+			}
+		};
+		mShowApplications.setOnTouchListener(mButtonTouchFeedbackListener);
+		mUploadButton.setOnTouchListener(mButtonTouchFeedbackListener);
+		mConnectRemoteButton.setOnTouchListener(mButtonTouchFeedbackListener);
+		mPlayVideoButton.setOnTouchListener(mButtonTouchFeedbackListener);
+		
 		
 		
 		mParametersButton = (ImageView) findViewById(R.id.parameters);
@@ -233,6 +248,7 @@ public class MediaHome extends Activity {
 				startActivity(goToParameters);
 			}
 		});
+		mParametersButton.setOnTouchListener(mButtonTouchFeedbackListener);
     }
     
     /**
