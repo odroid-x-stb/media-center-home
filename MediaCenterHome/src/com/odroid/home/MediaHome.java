@@ -2,10 +2,13 @@ package com.odroid.home;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import android.opengl.Visibility;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -25,6 +28,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PaintDrawable;
+import android.text.format.DateFormat;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -66,7 +70,13 @@ public class MediaHome extends Activity {
     private boolean mBlockAnimation;
     
     private ImageView mShowApplications;
-
+    
+    private TextView mClock;
+    private boolean mTickerStopped;
+    private Handler mHandler;
+    private Runnable mTicker;
+    private Date mDateNow;
+    
     private Animation mGridEntry;
     private Animation mGridExit;
     
@@ -84,6 +94,7 @@ public class MediaHome extends Activity {
 
         bindApplications();
         bindButtons();
+        bindClock();
 
         mGridEntry = AnimationUtils.loadAnimation(this, R.anim.grid_entry);
         mGridExit = AnimationUtils.loadAnimation(this, R.anim.grid_exit);
@@ -103,6 +114,9 @@ public class MediaHome extends Activity {
     public void onDestroy() {
         super.onDestroy();
 
+        // Stop the clock thread
+        mTickerStopped = true;
+        
         // Remove the callback for the cached drawables or we leak
         // the previous Home screen on orientation change
         final int count = mApplications.size();
@@ -167,6 +181,34 @@ public class MediaHome extends Activity {
         mShowApplications.setOnClickListener(new ShowApplications());
 
         mGrid.setOnItemClickListener(new ApplicationLauncher());
+        
+        
+    }
+    
+    /**
+     * Binds clock
+     */
+    private void bindClock() {
+    	mClock = (TextView) findViewById(R.id.clock);
+    	
+    	mTickerStopped = false;
+        mHandler = new Handler();
+
+        mDateNow = new Date();
+        /**
+         * requests a tick on the next hard-second boundary
+         */
+        mTicker = new Runnable() {
+                public void run() {
+                    if (mTickerStopped) return;
+                    mDateNow.setTime(System.currentTimeMillis());
+                    mClock.setText(mDateNow.getHours() + ":" + mDateNow.getMinutes());
+                    long now = SystemClock.uptimeMillis();
+                    long next = now + (1000 - now % 1000);
+                    mHandler.postAtTime(mTicker, next);
+                }
+            };
+        mTicker.run();
     }
     
 
