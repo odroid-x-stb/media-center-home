@@ -7,6 +7,7 @@ import java.util.List;
 
 import fr.enseirb.odroidx.home.R;
 
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -79,7 +80,8 @@ public class MediaHome extends Activity {
     
     private ImageView mUploadButton;
     private ImageView mConnectRemoteButton;
-    private ImageView mPlayVideoButton;
+    private ImageView mPlayVodButton;
+    private ImageView mPlayTVButton;
     private ImageView mParametersButton;
     private OnClickListener mButtonClickedListener;
     private OnTouchListener mButtonTouchFeedbackListener;
@@ -102,7 +104,7 @@ public class MediaHome extends Activity {
         bindApplications();
         bindButtons();
         bindClock();
-
+        
         mGridEntry = AnimationUtils.loadAnimation(this, R.anim.grid_entry);
         mGridExit = AnimationUtils.loadAnimation(this, R.anim.grid_exit);
     }
@@ -191,7 +193,8 @@ public class MediaHome extends Activity {
         
         mUploadButton = (ImageView) findViewById(R.id.upload);
         mConnectRemoteButton = (ImageView) findViewById(R.id.connect_remote);
-        mPlayVideoButton = (ImageView) findViewById(R.id.play_video);
+        mPlayVodButton = (ImageView) findViewById(R.id.play_vod);
+        mPlayTVButton = (ImageView) findViewById(R.id.play_tv);
         mButtonClickedListener = new OnClickListener() {
 			
 			public void onClick(View v) {
@@ -203,9 +206,11 @@ public class MediaHome extends Activity {
 				case R.id.connect_remote:
 					packageName = getString(R.string.package_remote);
 					break;
-				case R.id.play_video:
-					packageName = getString(R.string.package_play);
+				case R.id.play_vod:
+					packageName = getString(R.string.package_play_vod);
 					break;
+				case R.id.play_tv:
+					packageName = getString(R.string.package_play_tv);
 				}
 				try {
 					Intent launchAppIntent = getPackageManager().getLaunchIntentForPackage(packageName);
@@ -218,7 +223,8 @@ public class MediaHome extends Activity {
 		};
 		mUploadButton.setOnClickListener(mButtonClickedListener);
 		mConnectRemoteButton.setOnClickListener(mButtonClickedListener);
-		mPlayVideoButton.setOnClickListener(mButtonClickedListener);
+		mPlayVodButton.setOnClickListener(mButtonClickedListener);
+		mPlayTVButton.setOnClickListener(mButtonClickedListener);
 		mButtonTouchFeedbackListener = new OnTouchListener() {
 			
 			public boolean onTouch(View v, MotionEvent event) {
@@ -236,7 +242,8 @@ public class MediaHome extends Activity {
 		mShowApplications.setOnTouchListener(mButtonTouchFeedbackListener);
 		mUploadButton.setOnTouchListener(mButtonTouchFeedbackListener);
 		mConnectRemoteButton.setOnTouchListener(mButtonTouchFeedbackListener);
-		mPlayVideoButton.setOnTouchListener(mButtonTouchFeedbackListener);
+		mPlayVodButton.setOnTouchListener(mButtonTouchFeedbackListener);
+		mPlayTVButton.setOnTouchListener(mButtonTouchFeedbackListener);
 		
 		
 		
@@ -377,6 +384,7 @@ public class MediaHome extends Activity {
         mGrid.setVisibility(View.INVISIBLE);
 
     }
+    
 
     /**
      * Receives notifications when applications are added/removed.
