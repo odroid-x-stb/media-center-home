@@ -1,9 +1,12 @@
 <resources>
 
+    <string name="server_ip_extra_name">serverIP</string>
+    
     <string name="app_name">MediaCenterHome</string>
-    <string name="package_upload">fr.enseirb.odroidx.remote.server</string>
-	<string name="package_play_vod">fr.enseirb.odroidx.videoplayer.vod</string>
-	<string name="package_play_tv">fr.enseirb.odroidx.videoplayer.tv</string>
+    <string name="package_upload">fr.enseirb.odroidx.videomanager</string>
+	<string name="package_play_vod">fr.enseirb.odroidx.movieselector</string>
+	<string name="package_vlc">org.videolan.vlc</string>
+	<string name="package_play_tv">fr.enseirb.odroidx.tv</string>
 	<string name="package_remote">fr.enseirb.odroidx.remote</string>
     
 </resources>

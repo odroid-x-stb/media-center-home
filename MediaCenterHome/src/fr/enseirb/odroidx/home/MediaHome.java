@@ -11,12 +11,14 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
@@ -199,6 +201,7 @@ public class MediaHome extends Activity {
 			
 			public void onClick(View v) {
 				String packageName = "";
+				SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MediaHome.this);
 				switch (v.getId()) {
 				case R.id.upload:
 					packageName = getString(R.string.package_upload);
@@ -207,13 +210,21 @@ public class MediaHome extends Activity {
 					packageName = getString(R.string.package_remote);
 					break;
 				case R.id.play_vod:
-					packageName = getString(R.string.package_play_vod);
+					boolean useVlc = preferences.getBoolean("useVlcForVOD", false);
+					if(useVlc) {
+						packageName = getString(R.string.package_vlc);
+					}
+					else {
+						packageName = getString(R.string.package_play_vod);
+					}
 					break;
 				case R.id.play_tv:
 					packageName = getString(R.string.package_play_tv);
 				}
 				try {
 					Intent launchAppIntent = getPackageManager().getLaunchIntentForPackage(packageName);
+					String key = getString(R.string.server_ip_extra_name);
+					launchAppIntent.putExtra(key,preferences.getString(key,""));
 					startActivity(launchAppIntent);
 				}
 				catch (Exception e) {
