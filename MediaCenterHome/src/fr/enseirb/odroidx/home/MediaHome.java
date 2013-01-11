@@ -634,17 +634,12 @@ public class MediaHome extends Activity {
 		selectedButton = which;
 		int tmp = 0;
 		if(which >= 0 && which <= buttons.size()-1) {
-			AlphaAnimation tmpAnim = new AlphaAnimation(buttons.get(which).getAlpha(),1.0f);
-			tmpAnim.setFillAfter(true);
-			buttons.get(which).startAnimation(tmpAnim);
-			//buttons.get(which).setAlpha(1.0f);
+			buttons.get(which).startAnimation(mFadeIn);
+			buttons.get(which).setAlpha(0.1f);
 		}
 		if(previous >= 0 && previous <= buttons.size()-1) {
-			//buttons.get(previous).startAnimation(mFadeOut);
-			AlphaAnimation tmpAnim = new AlphaAnimation(buttons.get(previous).getAlpha(),0.3f);
-			tmpAnim.setFillAfter(true);
-			buttons.get(previous).startAnimation(tmpAnim);
-			//buttons.get(previous).setAlpha(0.3f);
+			buttons.get(previous).startAnimation(mFadeOut);
+			buttons.get(previous).setAlpha(0.3f);
 		}
 	}
 
