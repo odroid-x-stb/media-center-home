@@ -40,6 +40,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
@@ -637,7 +638,10 @@ public class MediaHome extends Activity {
 			//buttons.get(which).setAlpha(1.0f);
 		}
 		if(previous >= 0 && previous <= buttons.size()-1) {
-			buttons.get(previous).startAnimation(mFadeOut);
+			//buttons.get(previous).startAnimation(mFadeOut);
+			AlphaAnimation tmpAnim = new AlphaAnimation(buttons.get(previous).getAlpha(),0.3f);
+			tmpAnim.setFillAfter(true);
+			buttons.get(previous).startAnimation(tmpAnim);
 			//buttons.get(previous).setAlpha(0.3f);
 		}
 	}
