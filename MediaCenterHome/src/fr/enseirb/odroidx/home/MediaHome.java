@@ -244,8 +244,8 @@ public class MediaHome extends Activity {
 		};
 		buttons.get(0).setOnClickListener(mButtonClickedListener);
 		buttons.get(1).setOnClickListener(mButtonClickedListener);
-		buttons.get(2).setOnClickListener(mButtonClickedListener);
 		buttons.get(3).setOnClickListener(mButtonClickedListener);
+		buttons.get(4).setOnClickListener(mButtonClickedListener);
 		mButtonTouchFeedbackListener = new OnTouchListener() {
 
 			public boolean onTouch(View v, MotionEvent event) {
