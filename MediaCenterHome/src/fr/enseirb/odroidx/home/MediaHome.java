@@ -598,6 +598,9 @@ public class MediaHome extends Activity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if(isFirstCommandReceivedFromRemote){
 			isFirstCommandReceivedFromRemote = false;
+			for(ImageView button : buttons) {
+				button.setAlpha(0.3f);
+			}
 			setSelectedButton(2, -1);
 		}
 		else {
@@ -632,7 +635,7 @@ public class MediaHome extends Activity {
 		}
 		if(previous >= 0 && previous <= buttons.size()-1) {
 			buttons.get(previous).startAnimation(mFadeOut);
-			buttons.get(previous).setAlpha(0.6f);
+			buttons.get(previous).setAlpha(0.3f);
 		}
 	}
 
