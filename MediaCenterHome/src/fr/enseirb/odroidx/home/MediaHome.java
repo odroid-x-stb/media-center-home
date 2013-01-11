@@ -88,6 +88,8 @@ public class MediaHome extends Activity {
 
 	private Animation mGridEntry;
 	private Animation mGridExit;
+	private Animation mFadeIn;
+	private Animation mFadeOut;
 
 	@Override
 	public void onCreate(Bundle icicle) {
@@ -112,6 +114,8 @@ public class MediaHome extends Activity {
 
 		mGridEntry = AnimationUtils.loadAnimation(this, R.anim.grid_entry);
 		mGridExit = AnimationUtils.loadAnimation(this, R.anim.grid_exit);
+		mFadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+		mFadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
 
 		isFirstCommandReceivedFromRemote = true;
 	}
@@ -605,7 +609,7 @@ public class MediaHome extends Activity {
 				}
 				break;
 			case KeyEvent.KEYCODE_DPAD_RIGHT:
-				if(selectedButton == buttons.size()) {}
+				if(selectedButton == buttons.size()-1) {}
 				else {
 					setSelectedButton(selectedButton+1);
 				}
@@ -624,10 +628,10 @@ public class MediaHome extends Activity {
 		int tmp = 0;
 		for(ImageView button : buttons) {
 			if(tmp == selectedButton) {
-				button.setVisibility(View.VISIBLE);
+				button.startAnimation(mFadeIn);
 			}
 			else {
-				button.setVisibility(View.INVISIBLE);
+				button.startAnimation(mFadeOut);
 			}
 			tmp++;
 		}
