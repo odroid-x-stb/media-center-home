@@ -197,11 +197,11 @@ public class MediaHome extends Activity {
 	 * Binds actions to the various buttons.
 	 */
 	private void bindButtons() {
-		
+
 		buttons = new ArrayList<ImageView>();
 		buttons.add((ImageView) findViewById(R.id.upload));
 		buttons.add((ImageView) findViewById(R.id.connect_remote));
-		
+
 		buttons.add((ImageView) findViewById(R.id.show_all_apps));
 		buttons.get(2).setOnClickListener(new ShowApplications());
 
@@ -275,7 +275,7 @@ public class MediaHome extends Activity {
 				startActivity(goToParameters);
 			}
 		});
-		
+
 	}
 
 	/**
@@ -598,20 +598,20 @@ public class MediaHome extends Activity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if(isFirstCommandReceivedFromRemote){
 			isFirstCommandReceivedFromRemote = false;
-			setSelectedButton(2);
+			setSelectedButton(2, -1);
 		}
 		else {
 			switch(keyCode) {
 			case KeyEvent.KEYCODE_DPAD_LEFT:
 				if(selectedButton == 0) {}
 				else {
-					setSelectedButton(selectedButton-1);
+					setSelectedButton(selectedButton-1, selectedButton);
 				}
 				break;
 			case KeyEvent.KEYCODE_DPAD_RIGHT:
 				if(selectedButton == buttons.size()-1) {}
 				else {
-					setSelectedButton(selectedButton+1);
+					setSelectedButton(selectedButton+1, selectedButton);
 				}
 				break;
 			case KeyEvent.KEYCODE_DPAD_CENTER:
@@ -623,19 +623,16 @@ public class MediaHome extends Activity {
 		return true;
 	}
 
-	private void setSelectedButton(int which) {
+	private void setSelectedButton(int which, int previous) {
 		selectedButton = which;
 		int tmp = 0;
-		for(ImageView button : buttons) {
-			if(tmp == selectedButton) {
-				button.startAnimation(mFadeIn);
-				button.setAlpha(1.0f);
-			}
-			else {
-				button.startAnimation(mFadeOut);
-				button.setAlpha(0.4f);
-			}
-			tmp++;
+		if(which >= 0 && which <= buttons.size()-1) {
+			buttons.get(which).startAnimation(mFadeIn);
+			buttons.get(which).setAlpha(1.0f);
+		}
+		if(previous >= 0 && previous <= buttons.size()-1) {
+			buttons.get(previous).startAnimation(mFadeOut);
+			buttons.get(previous).setAlpha(0.6f);
 		}
 	}
 
