@@ -41,6 +41,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
@@ -115,8 +116,10 @@ public class MediaHome extends Activity {
 		mGridEntry = AnimationUtils.loadAnimation(this, R.anim.grid_entry);
 		mGridExit = AnimationUtils.loadAnimation(this, R.anim.grid_exit);
 		mFadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+		mFadeIn.setFillAfter(true);
 		mFadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
-
+		mFadeOut.setFillAfter(true);
+		
 		isFirstCommandReceivedFromRemote = true;
 	}
 
@@ -631,11 +634,11 @@ public class MediaHome extends Activity {
 		int tmp = 0;
 		if(which >= 0 && which <= buttons.size()-1) {
 			buttons.get(which).startAnimation(mFadeIn);
-			buttons.get(which).setAlpha(1.0f);
+			//buttons.get(which).setAlpha(1.0f);
 		}
 		if(previous >= 0 && previous <= buttons.size()-1) {
 			buttons.get(previous).startAnimation(mFadeOut);
-			buttons.get(previous).setAlpha(0.3f);
+			//buttons.get(previous).setAlpha(0.3f);
 		}
 	}
 
