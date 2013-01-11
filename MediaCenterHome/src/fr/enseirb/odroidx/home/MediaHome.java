@@ -73,8 +73,6 @@ public class MediaHome extends Activity {
 
 	private boolean mBlockAnimation;
 
-	private ImageView mShowApplications;
-
 	private TextView mClock;
 	private boolean mTickerStopped;
 	private Handler mHandler;
@@ -195,15 +193,16 @@ public class MediaHome extends Activity {
 	 * Binds actions to the various buttons.
 	 */
 	private void bindButtons() {
-		mShowApplications = (ImageView) findViewById(R.id.show_all_apps);
-		mShowApplications.setOnClickListener(new ShowApplications());
+		
+		buttons = new ArrayList<ImageView>();
+		buttons.add((ImageView) findViewById(R.id.upload));
+		buttons.add((ImageView) findViewById(R.id.connect_remote));
+		
+		buttons.add((ImageView) findViewById(R.id.show_all_apps));
+		buttons.get(2).setOnClickListener(new ShowApplications());
 
 		mGrid.setOnItemClickListener(new ApplicationLauncher());
 
-		buttons = new ArrayList<ImageView>();
-
-		buttons.add((ImageView) findViewById(R.id.upload));
-		buttons.add((ImageView) findViewById(R.id.connect_remote));
 		buttons.add((ImageView) findViewById(R.id.play_vod));
 		buttons.add((ImageView) findViewById(R.id.play_tv));
 		buttons.add((ImageView) findViewById(R.id.parameters));
@@ -261,22 +260,18 @@ public class MediaHome extends Activity {
 				return false;
 			}
 		};
-		mShowApplications.setOnTouchListener(mButtonTouchFeedbackListener);
-		buttons.get(0).setOnTouchListener(mButtonTouchFeedbackListener);
-		buttons.get(1).setOnTouchListener(mButtonTouchFeedbackListener);
-		buttons.get(2).setOnTouchListener(mButtonTouchFeedbackListener);
-		buttons.get(3).setOnTouchListener(mButtonTouchFeedbackListener);
+		for(ImageView button : buttons) {
+			button.setOnTouchListener(mButtonTouchFeedbackListener);
+		}
 
-
-
-		buttons.get(4).setOnClickListener(new OnClickListener() {
+		buttons.get(5).setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
 				Intent goToParameters = new Intent(MediaHome.this, Parameters.class);
 				startActivity(goToParameters);
 			}
 		});
-		buttons.get(4).setOnTouchListener(mButtonTouchFeedbackListener);
+		
 	}
 
 	/**
