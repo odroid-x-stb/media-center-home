@@ -629,9 +629,11 @@ public class MediaHome extends Activity {
 		for(ImageView button : buttons) {
 			if(tmp == selectedButton) {
 				button.startAnimation(mFadeIn);
+				button.setAlpha(1.0f);
 			}
 			else {
 				button.startAnimation(mFadeOut);
+				button.setAlpha(0.4f);
 			}
 			tmp++;
 		}
