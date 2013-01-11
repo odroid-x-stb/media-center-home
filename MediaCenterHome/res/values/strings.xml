@@ -7,6 +7,6 @@
 	<string name="package_play_vod">fr.enseirb.odroidx.movieselector</string>
 	<string name="package_vlc">org.videolan.vlc</string>
 	<string name="package_play_tv">fr.enseirb.odroidx.tv</string>
-	<string name="package_remote">fr.enseirb.odroidx.remote</string>
+	<string name="package_remote">fr.enseirb.odroidx.remote_server</string>
     
 </resources>

@@ -31,6 +31,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PaintDrawable;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -102,6 +103,11 @@ public class MediaHome extends Activity {
         registerIntentReceivers();
 
         loadApplications(true);
+        
+        this.startService(new Intent("RemoteControlService.intent.action.Launch"));
+        
+        STBRemoteControlCommunication stbrcc = new STBRemoteControlCommunication(this);
+	    stbrcc.doBindService();
 
         bindApplications();
         bindButtons();
@@ -157,8 +163,8 @@ public class MediaHome extends Activity {
         super.onSaveInstanceState(outState);
         outState.putBoolean(KEY_SAVE_GRID_OPENED, mGrid.getVisibility() == View.VISIBLE);
     }
-    
-    /**
+
+	/**
      * Registers various intent receivers. The current implementation registers
      * only a wallpaper intent receiver to let other applications change the
      * wallpaper.
