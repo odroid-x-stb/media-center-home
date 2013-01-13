@@ -1,5 +1,6 @@
 package fr.enseirb.odroidx.home;
 
+import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.ComponentName;
 import android.content.Context;
@@ -21,24 +22,26 @@ public class STBRemoteControlCommunication {
     boolean mIsBound;
     final Messenger mMessenger = new Messenger(new IncomingHandler());
 
-	private static final int CMD__VIDEO_PLAY = 10;
-	private static final int CMD__VIDEO_PAUSE = 11;
-	private static final int CMD__VIDEO_PREVIOUS = 12;
-	private static final int CMD__VIDEO_REWIND = 13;
-	private static final int CMD__VIDEO_FORWARD = 14;
-	private static final int CMD__VIDEO_NEXT = 15;
-	private static final int CMD__MOVE_UP = 16;
-	private static final int CMD__MOVE_DOWN = 17;
-	private static final int CMD__MOVE_LEFT = 18;
-	private static final int CMD__MOVE_RIGHT = 19;
-	private static final int CMD__SELECT = 20;
+    public static final int CMD__VIDEO_PLAY = 10;
+	public static final int CMD__VIDEO_PAUSE = 11;
+	public static final int CMD__VIDEO_STOP = 23;
+	public static final int CMD__VIDEO_PREVIOUS = 12;
+	public static final int CMD__VIDEO_NEXT = 15;
+	public static final int CMD__MOVE_UP = 16;
+	public static final int CMD__MOVE_DOWN = 17;
+	public static final int CMD__MOVE_LEFT = 18;
+	public static final int CMD__MOVE_RIGHT = 19;
+	public static final int CMD__SELECT = 20;
+	public static final int CMD__HOME = 21;
+	public static final int CMD__BACK = 22;
+	
     
 	private static final int MSG__REGISTER_CLIENT = 1;
 	private static final int MSG__UNREGISTER_CLIENT = 2;
 	
-	private MediaHome act;
+	private Activity act;
 	
-	public STBRemoteControlCommunication (MediaHome a) {
+	public STBRemoteControlCommunication (Activity a) {
 		act = a;
 	}
 	
@@ -56,11 +59,8 @@ public class STBRemoteControlCommunication {
 	            case CMD__VIDEO_PREVIOUS:
 	            	press_key(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
 	            	break;
-	            case CMD__VIDEO_REWIND:
-	            	press_key(KeyEvent.KEYCODE_MEDIA_REWIND);
-	            	break;
-	            case CMD__VIDEO_FORWARD:
-	            	press_key(KeyEvent.KEYCODE_MEDIA_FAST_FORWARD);
+	            case CMD__VIDEO_STOP:
+	            	press_key(KeyEvent.KEYCODE_MEDIA_STOP);
 	            	break;
 	            case CMD__VIDEO_NEXT:
 	            	press_key(KeyEvent.KEYCODE_MEDIA_NEXT);
@@ -79,7 +79,13 @@ public class STBRemoteControlCommunication {
 	            	break;
 	            case CMD__SELECT:
 	            	press_key(KeyEvent.KEYCODE_DPAD_CENTER);
-	            	break;   
+	            	break;
+	            case CMD__BACK:
+	            	press_key(KeyEvent.KEYCODE_BACK);
+	            	break;
+	            case CMD__HOME:
+	            	press_key(KeyEvent.KEYCODE_HOME);
+	            	break;
 	            default:
 	                super.handleMessage(msg);
             }

@@ -13,6 +13,9 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
+import android.app.ActivityManager.RunningTaskInfo;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -63,6 +66,8 @@ public class MediaHome extends Activity {
 	 * Keys during freeze/thaw.
 	 */
 	private static final String KEY_SAVE_GRID_OPENED = "grid.opened";
+	
+	private static final String REMOTE_SERVICE_NAME = "fr.enseirb.odroidx.remote_server.service.RemoteControlService";
 
 	private static ArrayList<ApplicationInfo> mApplications;
 
@@ -105,10 +110,26 @@ public class MediaHome extends Activity {
 
 		loadApplications(true);
 
-		this.startService(new Intent("RemoteControlService.intent.action.Launch"));
+		
+		/* Start remote control service and bind it*/
+		ActivityManager actvityManager = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
+		List<RunningServiceInfo> procInfos = actvityManager.getRunningServices(1000);
+		boolean needToRelaunchService = true;
+		for(RunningServiceInfo taskInfo : procInfos) {
+			if(taskInfo.service.getClassName().equalsIgnoreCase(REMOTE_SERVICE_NAME)){
+				needToRelaunchService = false;
+			}
+		}
+
+		if(needToRelaunchService) {
+			Log.i("MediaHome", "Launch new Service");
+			this.startService(new Intent("RemoteControlService.intent.action.Launch"));
+		}
 
 		STBRemoteControlCommunication stbrcc = new STBRemoteControlCommunication(this);
 		stbrcc.doBindService();
+		
+		/* Since here, service is binded*/
 
 		bindApplications();
 		bindButtons();
@@ -406,7 +427,8 @@ public class MediaHome extends Activity {
 		mGridExit.setAnimationListener(new HideGrid());
 		mGrid.startAnimation(mGridExit);
 		mGrid.setVisibility(View.INVISIBLE);
-
+		
+		setSelectedButton(selectedButton);
 	}
 
 
@@ -605,20 +627,20 @@ public class MediaHome extends Activity {
 			for(ImageView button : buttons) {
 				button.setAlpha(0.3f);
 			}
-			setSelectedButton(2, -1);
+			setSelectedButton(2);
 		}
 		else {
 			switch(keyCode) {
 			case KeyEvent.KEYCODE_DPAD_LEFT:
 				if(selectedButton == 0) {}
 				else {
-					setSelectedButton(selectedButton-1, selectedButton);
+					setSelectedButton(selectedButton-1);
 				}
 				break;
 			case KeyEvent.KEYCODE_DPAD_RIGHT:
 				if(selectedButton == buttons.size()-1) {}
 				else {
-					setSelectedButton(selectedButton+1, selectedButton);
+					setSelectedButton(selectedButton+1);
 				}
 				break;
 			case KeyEvent.KEYCODE_DPAD_CENTER:
@@ -630,16 +652,17 @@ public class MediaHome extends Activity {
 		return true;
 	}
 
-	private void setSelectedButton(int which, int previous) {
+	private void setSelectedButton(int which) {
 		selectedButton = which;
 		int tmp = 0;
-		if(which >= 0 && which <= buttons.size()-1) {
-			buttons.get(which).startAnimation(mFadeIn);
-			buttons.get(which).setAlpha(0.1f);
-		}
-		if(previous >= 0 && previous <= buttons.size()-1) {
-			buttons.get(previous).startAnimation(mFadeOut);
-			buttons.get(previous).setAlpha(0.3f);
+		for(ImageView button : buttons) {
+			if(tmp == which) {
+				button.setAlpha(1.0f);
+			}
+			else {
+				button.setAlpha(0.3f);
+			}
+			tmp++;
 		}
 	}
 

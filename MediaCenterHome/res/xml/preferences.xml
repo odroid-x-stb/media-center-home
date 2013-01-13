@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <CheckBoxPreference
-        android:key="useVlcForVOD"
-        android:title="VOD"
-        android:summary="Always launch VOD player with VLC app"
-        android:defaultValue="false" />
     <EditTextPreference
         android:key="serverIP"
         android:title="Server IP"
-        android:summary="The IP of the server to connect"
         android:defaultValue="192.168.1.8" />
 </PreferenceScreen>
