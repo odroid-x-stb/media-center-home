@@ -121,13 +121,15 @@ public class MediaHome extends Activity {
 			}
 		}
 
+		Log.i("MediaHome", "Start new home");
 		if(needToRelaunchService) {
 			Log.i("MediaHome", "Launch new Service");
 			this.startService(new Intent("RemoteControlService.intent.action.Launch"));
+			STBRemoteControlCommunication stbrcc = new STBRemoteControlCommunication(this);
+			stbrcc.doBindService();
 		}
 
-		STBRemoteControlCommunication stbrcc = new STBRemoteControlCommunication(this);
-		stbrcc.doBindService();
+		
 		
 		/* Since here, service is binded*/
 
