@@ -179,6 +179,7 @@ public class STBRemoteControlCommunication {
     
     private ServiceConnection mConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
+        	mIsBound = true;
             mService = new Messenger(service);
             try {
                 Message msg = Message.obtain(null, MSG__REGISTER_CLIENT);
@@ -196,7 +197,6 @@ public class STBRemoteControlCommunication {
 
     public void doBindService() {
         act.bindService(new Intent("RemoteControlService.intent.action.Launch"), mConnection, Context.BIND_AUTO_CREATE);
-        mIsBound = true;
     }
     
     public void doUnbindService() {

@@ -97,6 +97,8 @@ public class MediaHome extends Activity {
 	private Animation mGridExit;
 	private Animation mFadeIn;
 	private Animation mFadeOut;
+	
+	private STBRemoteControlCommunication stbrcc;
 
 	@Override
 	public void onCreate(Bundle icicle) {
@@ -111,6 +113,8 @@ public class MediaHome extends Activity {
 		loadApplications(true);
 
 		
+		this.startService(new Intent("RemoteControlService.intent.action.Launch"));
+		
 		/* Start remote control service and bind it*/
 		ActivityManager actvityManager = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
 		List<RunningServiceInfo> procInfos = actvityManager.getRunningServices(1000);
@@ -122,12 +126,6 @@ public class MediaHome extends Activity {
 		}
 
 		Log.i("MediaHome", "Start new home");
-		if(needToRelaunchService) {
-			Log.i("MediaHome", "Launch new Service");
-			this.startService(new Intent("RemoteControlService.intent.action.Launch"));
-			STBRemoteControlCommunication stbrcc = new STBRemoteControlCommunication(this);
-			stbrcc.doBindService();
-		}
 
 		
 		
@@ -172,6 +170,19 @@ public class MediaHome extends Activity {
 		}
 
 		unregisterReceiver(mApplicationsReceiver);
+	}
+
+	@Override
+	protected void onStart() {
+		stbrcc = new STBRemoteControlCommunication(this);
+		stbrcc.doBindService();
+		super.onStart();
+	}
+
+	@Override
+	protected void onStop() {
+		stbrcc.doUnbindService();
+		super.onStop();
 	}
 
 	@Override

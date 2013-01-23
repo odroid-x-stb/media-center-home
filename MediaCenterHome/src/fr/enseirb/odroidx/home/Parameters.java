@@ -8,6 +8,8 @@ import android.preference.PreferenceActivity;
 
 public class Parameters extends PreferenceActivity{
 
+	private fr.enseirb.odroidx.home.STBRemoteControlCommunication stbrcc;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -30,7 +32,15 @@ public class Parameters extends PreferenceActivity{
 	}
 
 	@Override
+	protected void onStart() {
+		stbrcc = new STBRemoteControlCommunication(this);
+		stbrcc.doBindService();
+		super.onStart();
+	}
+
+	@Override
 	protected void onStop() {
+		stbrcc.doUnbindService();
 		super.onStop();
 	}
 
