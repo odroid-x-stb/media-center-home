@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+    Copyright (C) 2012 Sebastien Dubouchez <sdubouchez@enseirb-matmeca.fr>
+
+    Licensed under the GNU LESSER GENERAL PUBLIC LICENSE, Version 3, 29 June 2007;
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.gnu.org/licenses/lgpl-3.0.txt
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<resources xmlns:android="http://schemas.android.com/apk/res/android"> 
+    
+    <style name="CodeFont" parent="@android:style/TextAppearance.Medium">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    
+    <style name="CodeFont.Blue">
+        <item name="android:textColor">#33B5E5</item>
+    </style>
+    
+    <style name="CodeFont.Green">
+        <item name="android:textColor">#99CC00</item>
+    </style>
+    
+    <style name="CodeFont.Red">
+        <item name="android:textColor">#FF4444</item>
+    </style>
+    
+    <style name="CodeFont.Orange">
+        <item name="android:textColor">#FFBB33</item>
+    </style>
+    
+    <style name="CodeFont.Purple">
+        <item name="android:textColor">#AA66CC</item>
+    </style>
+    
+    <style name="CodeFont.Black">
+        <item name="android:textColor">#090B0C</item>
+    </style>
+
+</resources>

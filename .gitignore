@@ -9,11 +9,13 @@
 *.class
 
 # generated files
-MediaCenterHome/bin/
-MediaCenterHome/gen/
+bin/
+gen/
+target/
+.settings/
 
 # Local configuration file (sdk path, etc)
 local.properties
 .metadata
-
 *~
+.directory
