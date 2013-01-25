@@ -22,15 +22,11 @@ import java.util.List;
 
 import fr.enseirb.odroidx.home.R;
 
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningServiceInfo;
-import android.app.ActivityManager.RunningTaskInfo;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -58,9 +54,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
@@ -82,8 +76,6 @@ public class MediaHome extends Activity {
 	 */
 	private static final String KEY_SAVE_GRID_OPENED = "grid.opened";
 	
-	private static final String REMOTE_SERVICE_NAME = "fr.enseirb.odroidx.remote_server.service.RemoteControlService";
-
 	private static ArrayList<ApplicationInfo> mApplications;
 
 	private final BroadcastReceiver mApplicationsReceiver = new ApplicationsIntentReceiver();
@@ -102,8 +94,11 @@ public class MediaHome extends Activity {
 	private Calendar mCalendar;
 
 	private ArrayList<ImageView> buttons;
+	private ArrayList<String> buttonNames;
 	private OnClickListener mButtonClickedListener;
 	private OnTouchListener mButtonTouchFeedbackListener;
+	
+	private TextView currentSelectedAppTextView;
 
 	private boolean isFirstCommandReceivedFromRemote;
 	private int selectedButton;
@@ -129,19 +124,8 @@ public class MediaHome extends Activity {
 
 		
 		this.startService(new Intent("RemoteControlService.intent.action.Launch"));
-		
-		/* Start remote control service and bind it*/
-		ActivityManager actvityManager = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
-		List<RunningServiceInfo> procInfos = actvityManager.getRunningServices(1000);
-		boolean needToRelaunchService = true;
-		for(RunningServiceInfo taskInfo : procInfos) {
-			if(taskInfo.service.getClassName().equalsIgnoreCase(REMOTE_SERVICE_NAME)){
-				needToRelaunchService = false;
-			}
-		}
 
 		Log.i("MediaHome", "Start new home");
-
 		
 		
 		/* Since here, service is binded*/
@@ -252,18 +236,25 @@ public class MediaHome extends Activity {
 	private void bindButtons() {
 
 		buttons = new ArrayList<ImageView>();
+		buttonNames = new ArrayList<String>();
 		buttons.add((ImageView) findViewById(R.id.upload));
+		buttonNames.add("Uploader fichier");
 		buttons.add((ImageView) findViewById(R.id.connect_remote));
-
+		buttonNames.add("Panel test télécommande");
+		
 		buttons.add((ImageView) findViewById(R.id.show_all_apps));
+		buttonNames.add("Applications");
 		buttons.get(2).setOnClickListener(new ShowApplications());
 
 		mGrid.setOnItemClickListener(new ApplicationLauncher());
 
 		buttons.add((ImageView) findViewById(R.id.play_vod));
+		buttonNames.add("VOD");
 		buttons.add((ImageView) findViewById(R.id.play_tv));
+		buttonNames.add("TV");
 		buttons.add((ImageView) findViewById(R.id.parameters));
-
+		buttonNames.add("Options");
+		
 		mButtonClickedListener = new OnClickListener() {
 
 			public void onClick(View v) {
@@ -329,6 +320,10 @@ public class MediaHome extends Activity {
 			}
 		});
 
+		/*
+		 * Bind current app label
+		 */
+		currentSelectedAppTextView = (TextView) findViewById(R.id.current_selected_app);
 	}
 
 	/**
@@ -683,6 +678,7 @@ public class MediaHome extends Activity {
 	private void setSelectedButton(int which) {
 		selectedButton = which;
 		int tmp = 0;
+		currentSelectedAppTextView.setText(buttonNames.get(which));
 		for(ImageView button : buttons) {
 			if(tmp == which) {
 				button.setAlpha(1.0f);
